@@ -17,10 +17,13 @@ public class PurchaseRecordServiceImpl implements PurchaseRecordService {
     
     @Override
     public PurchaseRecord createPurchaseRecord(PurchaseRecord purchaseRecord) {
-        if (purchaseRecord.getAmount() <= 0) {
+        if (purchaseRecord.getAmount() == null || purchaseRecord.getAmount() <= 0) {
             throw new IllegalArgumentException("Amount must be positive");
         }
-        return purchaseRecordRepository.save(purchaseRecord);
+        System.out.println("Creating purchase: CustomerId=" + purchaseRecord.getCustomerId() + ", Amount=" + purchaseRecord.getAmount());
+        PurchaseRecord saved = purchaseRecordRepository.save(purchaseRecord);
+        System.out.println("Saved purchase with ID: " + saved.getId());
+        return saved;
     }
     
     @Override
