@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ApiResponse;
+import com.example.demo.dto.CreateCustomerRequest;
 import com.example.demo.entity.CustomerProfile;
 import com.example.demo.service.CustomerProfileService;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,17 @@ public class CustomerProfileController {
     }
     
     @PostMapping
-    public ResponseEntity<ApiResponse> createCustomer(@RequestBody CustomerProfile customerProfile) {
-        CustomerProfile saved = customerProfileService.createCustomerProfile(customerProfile);
+    public ResponseEntity<ApiResponse> createCustomer(@RequestBody CreateCustomerRequest request) {
+        CustomerProfile customer = new CustomerProfile(
+            request.getCustomerId(),
+            request.getFullName(),
+            request.getEmail(),
+            request.getPhone(),
+            "BRONZE",
+            true,
+            null
+        );
+        CustomerProfile saved = customerProfileService.createCustomerProfile(customer);
         return ResponseEntity.ok(new ApiResponse(true, "Customer created successfully", saved));
     }
     
