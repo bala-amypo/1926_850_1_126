@@ -26,7 +26,12 @@ public class CustomerProfile {
     private Boolean active = true;
     
     private LocalDateTime createdAt;
-    
+
+    // --- ADDED FIELDS FOR TIER UPGRADE LOGIC ---
+    private Double totalSpend = 0.0;
+    private Integer totalVisits = 0;
+    // ------------------------------------------
+
     public CustomerProfile() {}
     
     public CustomerProfile(String customerId, String fullName, String email, String phone, String currentTier, Boolean active, LocalDateTime createdAt) {
@@ -69,4 +74,11 @@ public class CustomerProfile {
     
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    // --- ADDED GETTERS AND SETTERS ---
+    public Double getTotalSpend() { return totalSpend; }
+    public void setTotalSpend(Double totalSpend) { this.totalSpend = totalSpend; }
+
+    public Integer getTotalVisits() { return totalVisits; }
+    public void setTotalVisits(Integer totalVisits) { this.totalVisits = totalVisits; }
 }
