@@ -18,7 +18,7 @@ public class OpenApiConfig {
                         .version("1.0")
                         .description("Tier Update Testing"))
                 .servers(List.of(
-                        new Server().url("https://9244.pro604cr.amypo.ai/")
+                        new Server().url("https://9159.pro604cr.amypo.ai/")
                 ));
     }
 }
