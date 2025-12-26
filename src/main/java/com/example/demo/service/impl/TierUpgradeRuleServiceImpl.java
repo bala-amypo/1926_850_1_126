@@ -1,55 +1,59 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.TierUpgradeRule;
-import com.example.demo.repository.TierUpgradeRuleRepository;
-import com.example.demo.service.TierUpgradeRuleService;
-import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.model.TierUpgradeRule;
+import com.example.demo.repository.TierUpgradeRuleRepository;
+import com.example.demo.service.TierUpgradeRuleService;
 
 @Service
 public class TierUpgradeRuleServiceImpl implements TierUpgradeRuleService {
-    private final TierUpgradeRuleRepository tierUpgradeRuleRepository;
-    
-    public TierUpgradeRuleServiceImpl(TierUpgradeRuleRepository tierUpgradeRuleRepository) {
-        this.tierUpgradeRuleRepository = tierUpgradeRuleRepository;
+
+    private final TierUpgradeRuleRepository repository;
+
+    public TierUpgradeRuleServiceImpl(TierUpgradeRuleRepository repository) {
+        this.repository = repository;
     }
-    
+
     @Override
-    public TierUpgradeRule createTierUpgradeRule(TierUpgradeRule tierUpgradeRule) {
-        if (tierUpgradeRule.getMinSpend() < 0 || tierUpgradeRule.getMinVisits() < 0) {
-            throw new IllegalArgumentException("Minimum spend and visits must be >= 0");
+    public TierUpgradeRule createRule(TierUpgradeRule rule) {
+        if (rule.getMinSpend() < 0 || rule.getMinVisits() < 0) {
+            throw new IllegalArgumentException("Invalid rule values");
         }
-        return tierUpgradeRuleRepository.save(tierUpgradeRule);
+        return repository.save(rule);
     }
-    
+
     @Override
-    public TierUpgradeRule getTierUpgradeRuleById(Long id) {
-        return tierUpgradeRuleRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("Rule not found"));
+    public TierUpgradeRule updateRule(Long id, TierUpgradeRule updated) {
+        TierUpgradeRule existing = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Rule not found"));
+
+        existing.setFromTier(updated.getFromTier());
+        existing.setToTier(updated.getToTier());
+        existing.setMinSpend(updated.getMinSpend());
+        existing.setMinVisits(updated.getMinVisits());
+        existing.setActive(updated.getActive());
+
+        return repository.save(existing);
     }
-    
+
     @Override
-    public List<TierUpgradeRule> getAllActiveTierUpgradeRules() {
-        return tierUpgradeRuleRepository.findByActiveTrue();
+    public List<TierUpgradeRule> getActiveRules() {
+        return repository.findByActiveTrue();
     }
-    
+
     @Override
-    public TierUpgradeRule updateTierUpgradeRule(Long id, TierUpgradeRule tierUpgradeRule) {
-        TierUpgradeRule existing = getTierUpgradeRuleById(id);
-        existing.setFromTier(tierUpgradeRule.getFromTier());
-        existing.setToTier(tierUpgradeRule.getToTier());
-        existing.setMinSpend(tierUpgradeRule.getMinSpend());
-        existing.setMinVisits(tierUpgradeRule.getMinVisits());
-        existing.setActive(tierUpgradeRule.getActive());
-        return tierUpgradeRuleRepository.save(existing);
+    public Optional<TierUpgradeRule> getRule(String fromTier, String toTier) {
+        return repository.findByFromTierAndToTier(fromTier, toTier);
     }
-    
+
     @Override
-    public void deleteTierUpgradeRule(Long id) {
-        if (!tierUpgradeRuleRepository.existsById(id)) {
-            throw new NoSuchElementException("Rule not found");
-        }
-        tierUpgradeRuleRepository.deleteById(id);
+    public List<TierUpgradeRule> getAllRules() {
+        return repository.findAll();
     }
 }
+

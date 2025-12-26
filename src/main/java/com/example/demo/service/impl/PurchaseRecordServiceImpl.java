@@ -1,38 +1,44 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.PurchaseRecord;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.model.PurchaseRecord;
 import com.example.demo.repository.PurchaseRecordRepository;
 import com.example.demo.service.PurchaseRecordService;
-import org.springframework.stereotype.Service;
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class PurchaseRecordServiceImpl implements PurchaseRecordService {
-    private final PurchaseRecordRepository purchaseRecordRepository;
-    
-    public PurchaseRecordServiceImpl(PurchaseRecordRepository purchaseRecordRepository) {
-        this.purchaseRecordRepository = purchaseRecordRepository;
+
+    private final PurchaseRecordRepository repository;
+
+    public PurchaseRecordServiceImpl(PurchaseRecordRepository repository) {
+        this.repository = repository;
     }
-    
+
     @Override
-    public PurchaseRecord createPurchaseRecord(PurchaseRecord purchaseRecord) {
-        if (purchaseRecord.getAmount() == null || purchaseRecord.getAmount() <= 0) {
+    public PurchaseRecord recordPurchase(PurchaseRecord purchase) {
+        if (purchase.getAmount() <= 0) {
             throw new IllegalArgumentException("Amount must be positive");
         }
-        System.out.println("Creating purchase: CustomerId=" + purchaseRecord.getCustomerId() + ", Amount=" + purchaseRecord.getAmount());
-        PurchaseRecord saved = purchaseRecordRepository.save(purchaseRecord);
-        System.out.println("Saved purchase with ID: " + saved.getId());
-        return saved;
+        return repository.save(purchase);
     }
-    
+
     @Override
-    public List<PurchaseRecord> getPurchaseRecordsByCustomerId(Long customerId) {
-        return purchaseRecordRepository.findByCustomerId(customerId);
+    public List<PurchaseRecord> getPurchasesByCustomer(Long customerId) {
+        return repository.findByCustomerId(customerId);
     }
-    
+
     @Override
-    public List<PurchaseRecord> getPurchaseRecordsByDateRange(LocalDate start, LocalDate end) {
-        return purchaseRecordRepository.findByPurchaseDateBetween(start, end);
+    public List<PurchaseRecord> getAllPurchases() {
+        return repository.findAll();
+    }
+
+    @Override
+    public Optional<PurchaseRecord> getPurchaseById(Long id) {
+        return repository.findById(id);
     }
 }
