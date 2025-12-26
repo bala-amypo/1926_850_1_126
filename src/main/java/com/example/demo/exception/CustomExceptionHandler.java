@@ -15,3 +15,4 @@ public class CustomExceptionHandler {
                 HttpStatus.BAD_REQUEST
         );
     }
+}
