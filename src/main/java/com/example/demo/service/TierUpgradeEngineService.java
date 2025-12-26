@@ -1,8 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.CustomerProfile;
+import java.util.List;
+
+import com.example.demo.model.TierHistoryRecord;
 
 public interface TierUpgradeEngineService {
-    CustomerProfile evaluateAndUpgradeTier(Long customerId);
-    boolean checkTierUpgradeEligibility(Long customerId, String targetTier);
+
+    TierHistoryRecord evaluateAndUpgradeTier(Long customerId);
+
+    List<TierHistoryRecord> getHistoryByCustomer(Long customerId);
+
+    List<TierHistoryRecord> getAllHistory();
 }

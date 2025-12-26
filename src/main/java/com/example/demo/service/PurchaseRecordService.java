@@ -1,11 +1,17 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.PurchaseRecord;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+
+import com.example.demo.model.PurchaseRecord;
 
 public interface PurchaseRecordService {
-    PurchaseRecord createPurchaseRecord(PurchaseRecord purchaseRecord);
-    List<PurchaseRecord> getPurchaseRecordsByCustomerId(Long customerId);
-    List<PurchaseRecord> getPurchaseRecordsByDateRange(LocalDate start, LocalDate end);
-}   
+
+    PurchaseRecord recordPurchase(PurchaseRecord purchase);
+
+    List<PurchaseRecord> getPurchasesByCustomer(Long customerId);
+
+    List<PurchaseRecord> getAllPurchases();
+
+    Optional<PurchaseRecord> getPurchaseById(Long id);
+}
